@@ -13,6 +13,12 @@
 
 </div>
 
+## 🎥 Demo Video
+
+[![OSS_Lab Demo - AI Research Assistant Platform](https://img.youtube.com/vi/Bpcilc9F40I/maxresdefault.jpg)](https://youtu.be/Bpcilc9F40I?si=WTcL1B_rf89mRYjr)
+
+> **Watch the complete demo**: See OSS_Lab in action - from simple conversations to automated Jupyter notebook generation with gpt-oss-120b models!
+
 ## 🌟 Overview
 
 OSS_Lab is a comprehensive AI research platform that combines the power of OpenAI's gpt-oss models with intuitive interfaces and automated analysis workflows. Transform complex data analysis into interactive notebooks and insights with just a conversation.
@@ -38,7 +44,7 @@ OSS_Lab is a comprehensive AI research platform that combines the power of OpenA
 
 1. **Clone the repository**
    ```
-   git clone https://github.com/yourusername/OSS_Lab.git
+   git clone https://github.com/MarvelBoy047/OSS_Lab.git
    cd OSS_Lab
    ```
 
@@ -231,9 +237,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-- **Issues**: [GitHub Issues](https://github.com/yourusername/OSS_Lab/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/OSS_Lab/discussions)
-- **Email**: your.email@example.com
+- **Issues**: [GitHub Issues](https://github.com/MarvelBoy047/OSS_Lab/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/MarvelBoy047/OSS_Lab/discussions)
+- **Demo Video**: [Watch on YouTube](https://youtu.be/Bpcilc9F40I?si=WTcL1B_rf89mRYjr)
 
 ---
 
@@ -243,4 +249,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 *Empowering researchers, students, and innovators worldwide*
 
+[![Watch Demo](https://img.shields.io/badge/▶️%20Watch%20Demo-YouTube-red?style=for-the-badge)](https://youtu.be/Bpcilc9F40I?si=WTcL1B_rf89mRYjr)
+
 </div>
+
