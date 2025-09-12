@@ -1,0 +1,16 @@
+{
+  "api_key": "gsk_xxxxxxxxxxxx",
+  "provider": "Groq",
+  "model": "openai/gpt-oss-120b",
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "stream": false,
+  "embedding_model": "BGE Small",
+  "web_search_enabled": true,
+  "auto_image_search": true,
+  "auto_video_search": false,
+  "system_instructions": "",
+  "measure_unit": "Metric",
+  "updated_at": "2025-09-11T23:00:09.470326+00:00",
+  "version": "1.0"
+}

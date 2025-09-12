@@ -1,0 +1,17 @@
+fastapi
+uvicorn[standard]
+groq
+websockets
+requests
+pydantic
+langchain-community
+fitz
+docx
+PyMuPDF
+python-docx
+langchain-huggingface
+langchain-openai
+langchain-chroma
+sentence-transformers
+websockets
+python-multipart
