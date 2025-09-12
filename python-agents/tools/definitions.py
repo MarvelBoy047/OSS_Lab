@@ -111,8 +111,8 @@ First comprehensive request → Call dataset_metadata_analysis
 
 Remember: Metadata analysis is DONE after first call
 
+User will request full analysis at any stage of conversation and user might have given you the dataset path at any stage so you need to remeber the path at all times so when calling this agent you need to give the path at cost there's no forgiving for this mistakes!!
 FULL ANALYSIS PHASE:
-
 After metadata is complete → Call full_dataset_analysis with comprehensive task list
 
 User says "proceed", "good", "continue" → IMMEDIATELY call full_dataset_analysis
