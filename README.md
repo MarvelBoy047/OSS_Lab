@@ -33,59 +33,7 @@ OSS_Lab is a comprehensive AI research platform that combines the power of OpenA
 - ⚡ **Real-Time Updates** - WebSocket architecture for instant responses
 
 ## 🚀 Quick Start
-
-### Prerequisites
-
-- Python 3.11 or higher
-- Node.js 18.0 or higher  
-- Groq API key for gpt-oss model access
-
-### Installation
-
-1. **Clone the repository**
-   ```
-   git clone https://github.com/MarvelBoy047/OSS_Lab.git
-   cd OSS_Lab
-   ```
-
-2. **Set up the environment**
-   ```
-   # Install backend dependencies
-   cd python-agents
-   pip install -r requirements.txt
-   
-   # Install frontend dependencies
-   cd ../OSS_UI
-   npm install
-   
-   # Set up SearXNG (optional)
-   cd ../searxng-master
-   python -m venv venv
-   venv\Scripts\activate  # Windows
-   # source venv/bin/activate  # Linux/Mac
-   pip install -r requirements.txt
-   ```
-
-3. **Configure API keys**
-   ```
-   # Edit python-agents/config.py
-   GROQ_API_KEY = "your_groq_api_key_here"
-   ```
-
-4. **Launch the application**
-   ```
-   # Windows
-   run_osslab.bat
-   
-   # Linux/Mac
-   chmod +x run_osslab.sh
-   ./run_osslab.sh
-   ```
-
-5. **Access the application**
-   - Frontend: http://localhost:3000
-   - Backend API: http://127.0.0.1:8000
-   - SearXNG: http://127.0.0.1:8888
+# Given at ![OSS_Lab Installation & Setup Guide.md](./OSS_Lab Installation & Setup Guide.md)
 
 ## 🏗️ Architecture
 
