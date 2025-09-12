@@ -188,9 +188,6 @@ We welcome contributions to OSS_Lab! Here's how to get started:
 - **Analysis Tools**: Specialized modules for different research domains
 - **Documentation**: Tutorials, guides, and examples
 
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🙏 Acknowledgments
 
