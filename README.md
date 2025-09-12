@@ -33,7 +33,10 @@ OSS_Lab is a comprehensive AI research platform that combines the power of OpenA
 - ⚡ **Real-Time Updates** - WebSocket architecture for instant responses
 
 ## 🚀 Quick Start
-# Given at ![OSS_Lab Installation & Setup Guide.md](./OSS_Lab Installation & Setup Guide.md)
+# Given at 
+<div align="center">
+![OSS_Lab Installation & Setup Guide.md](./OSS_Lab Installation & Setup Guide.md)
+</div>
 
 ## 🏗️ Architecture
 
