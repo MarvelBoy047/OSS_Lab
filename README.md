@@ -136,42 +136,6 @@ OSS_Lab leverages OpenAI's gpt-oss-120b model through the Groq API for:
 3. **Get Insights**: AI generates analysis and creates a Jupyter notebook
 4. **Explore Results**: Interactive notebook with code, visualizations, and explanations
 
-## 🛠️ Development
-
-### Running in Development Mode
-
-```
-# Backend (with hot reload)
-cd python-agents
-uvicorn main:app --host 127.0.0.1 --port 8000 --reload --log-level debug
-
-# Frontend (with hot reload)  
-cd OSS_UI
-npm run dev
-
-# SearXNG (optional)
-cd searxng-master
-venv\Scripts\activate
-set FLASK_APP=searx.webapp
-flask run --host=127.0.0.1 --port=8888
-```
-
-### API Documentation
-
-Once the backend is running, visit:
-- **Swagger UI**: http://127.0.0.1:8000/docs
-- **ReDoc**: http://127.0.0.1:8000/redoc
-
-### Environment Variables
-
-Create a `.env` file in the root directory:
-```
-GROQ_API_KEY=your_groq_api_key
-SEARXNG_BASE_URL=http://127.0.0.1:8888
-WS_HOST=127.0.0.1
-WS_PORT=8000
-```
-
 ## 📖 Usage Guide
 
 ### Basic Chat
