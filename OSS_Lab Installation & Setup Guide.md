@@ -172,7 +172,7 @@ python -m venv venv
 venv\Scripts\activate
 pip install -r requirements.txt
 ```
-
+# First time launches can be buggy so after Main window is live try Ctrl+R for quick refersh the application will work like charm ✨
 ---
 
 ## ✅ Quick Start Checklist
@@ -191,5 +191,6 @@ pip install -r requirements.txt
 ---
 
 **🎉 Congratulations! OSS\_Lab is ready. Happy analyzing!**
+
 
 ```
