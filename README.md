@@ -35,7 +35,7 @@ OSS_Lab is a comprehensive AI research platform that combines the power of OpenA
 ## 🚀 Quick Start
 # Given at 
 <div align="center">
-![OSS_Lab Installation & Setup Guide.md](./OSS_Lab Installation & Setup Guide.md)
+![Installation](./OSS_Lab Installation & Setup Guide.md)
 </div>
 
 ## 🏗️ Architecture
