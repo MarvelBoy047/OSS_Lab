@@ -94,10 +94,8 @@ flask run --host=127.0.0.1 --port=8888
 ---
 
 ## 🤖 Automated Setup
-
-🚧 **Under Development**
-In future versions, one-click `.bat` scripts will be provided for first-time setup and project startup.
-
+## For windows OS only
+# Double-click on the ``` Run.bat``` you're app wil run but you must have the prerequesites installed still!  
 ---
 
 ## 🌐 Application Access Points
@@ -194,3 +192,4 @@ pip install -r requirements.txt
 
 
 ```
+
