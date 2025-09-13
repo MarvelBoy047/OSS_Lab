@@ -57,10 +57,14 @@
 git clone https://github.com/MarvelBoy047/OSS_Lab.git
 cd OSS_Lab
 ````
-
 ---
 
-## ⚡ Manual Setup
+## 🤖 Automated Setup
+## For windows OS only
+# Double-click on the ``` Run.bat``` you're app wil run but you must have the prerequesites installed still!  
+---
+
+## ⚡ Manual Setup (For development purpose)
 
 Run these steps in **three separate terminals**:
 
@@ -90,12 +94,6 @@ pip install -r requirements.txt
 $env:FLASK_APP = "searx.webapp"
 flask run --host=127.0.0.1 --port=8888
 ```
-
----
-
-## 🤖 Automated Setup
-## For windows OS only
-# Double-click on the ``` Run.bat``` you're app wil run but you must have the prerequesites installed still!  
 ---
 
 ## 🌐 Application Access Points
@@ -192,4 +190,5 @@ pip install -r requirements.txt
 
 
 ```
+
 
