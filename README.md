@@ -158,7 +158,6 @@ We welcome contributions to OSS_Lab! Here's how to get started:
 ## 📞 Support
 
 - **Issues**: [GitHub Issues](https://github.com/MarvelBoy047/OSS_Lab/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/MarvelBoy047/OSS_Lab/discussions)
 - **Demo Video**: [Watch on YouTube](https://youtu.be/Bpcilc9F40I?si=WTcL1B_rf89mRYjr)
 
 ---
