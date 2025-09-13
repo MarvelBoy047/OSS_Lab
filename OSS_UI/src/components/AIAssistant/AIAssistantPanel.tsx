@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils';
 import ReactMarkdown from 'react-markdown';
 import { Send, Mic, Copy, RefreshCw, Globe, Paperclip, X, Trash2, FileText } from 'lucide-react';
 import { toast } from 'sonner';
+import React from 'react';
 
 // Types
 interface ChatActions {
@@ -770,21 +771,40 @@ const ChatHeader = ({ onSwitch, onReset }: ChatHeaderProps) => {
   }, [onReset]);
 
   return (
-    <div className="flex items-center gap-2 p-2 border-b border-[var(--ai-panel-border)]">
-      <button
-        onClick={onSwitch}
-        className="px-3 py-1 text-sm bg-[var(--bg-secondary)] hover:bg-[var(--bg-tertiary)] rounded"
-        title="Switch to another conversation"
-      >
-        Switch
-      </button>
-      <button
-        onClick={handleReset}
-        className="px-3 py-1 text-sm bg-[var(--bg-secondary)] hover:bg-[var(--bg-tertiary)] rounded"
-        title="Reset chat and clear notebook"
-      >
-        Reset & Refresh
-      </button>
+    <div className="flex items-center gap-2 p-2 border-b border-[var(--ai-panel-border)] flex-col items-start">
+      {/* Buttons */}
+      <div className="flex items-center gap-2 w-full">
+        <button
+          onClick={onSwitch}
+          className="px-3 py-1 text-sm bg-[var(--bg-secondary)] hover:bg-[var(--bg-tertiary)] rounded"
+          title="Switch to another conversation"
+        >
+          Switch
+        </button>
+        <button
+          onClick={handleReset}
+          className="px-3 py-1 text-sm bg-[var(--bg-secondary)] hover:bg-[var(--bg-tertiary)] rounded"
+          title="Reset chat and clear notebook"
+        >
+          Reset & Refresh
+        </button>
+      </div>
+
+      {/* 👇 Permanent Hint — Always visible */}
+      <div className="mt-2 w-full text-center text-xs text-blue-500 dark:text-blue-400 animate-pulse bg-blue-50 dark:bg-blue-900/20 px-3 py-2 rounded-lg border border-blue-100 dark:border-blue-800">
+        <p className="flex items-center justify-center gap-1">
+          <span className="text-lg">💡</span>
+          <span>
+            <strong className="px-1.5 py-0.5 bg-blue-100 dark:bg-blue-800 rounded mx-1">
+              Ctrl+R
+            </strong>
+            to refresh if the app feels slow or unresponsive.
+          </span>
+        </p>
+        <p className="mt-1 opacity-70">
+          This is normal during heavy AI tasks — your data stays safe.
+        </p>
+      </div>
     </div>
   );
 };
