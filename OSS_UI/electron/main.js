@@ -35,10 +35,16 @@ function createWindow() {
   mainWindow.once('ready-to-show', () => {
     console.log('Window ready to show');
     mainWindow.show();
-    
-    if (isDev) {
-      mainWindow.webContents.openDevTools();
-    }
+
+    // 👇 NEW: Force hard refresh 1.5 seconds after window is visible
+    setTimeout(() => {
+      console.log('⚡ Forcing hard refresh (Ctrl+R equivalent) after window load...');
+      mainWindow.webContents.executeJavaScript(`
+        if (typeof window !== 'undefined') {
+          location.reload(true); // Force reload, bypassing cache
+        }
+      `);
+    }, 1500); // Wait 1.5s to ensure Next.js hydration is complete
   });
 
   mainWindow.on('closed', () => {
