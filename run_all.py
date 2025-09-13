@@ -75,6 +75,16 @@ def free_port_windows(port):
     except subprocess.CalledProcessError:
         pass
 
+def kill_process_tree(proc):
+    """Kill a process and all its children on Windows."""
+    if proc.poll() is None:
+        subprocess.run(
+            f'taskkill /F /T /PID {proc.pid}',
+            shell=True,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL
+        )
+
 # === PHASE 1: INSTALL DEPENDENCIES ===
 def run_install(cmd, label, log_path):
     """Run install command silently in background (no window)."""
@@ -157,16 +167,10 @@ try:
     # Get absolute path of current directory (where run_all.py lives)
     base_dir = os.getcwd()
 
-    # 🔹 SearXNG — Uses FULL PATH
+    # 🔹 SearXNG
     searxng_cmd = f'$env:FLASK_APP="searx.webapp"; cd "{base_dir}\\searxng-master"; flask run --host=127.0.0.1 --port=8888'
     searxng_proc = subprocess.Popen(
-        [
-            "powershell.exe",
-            "-NoProfile",
-            "-ExecutionPolicy", "Bypass",
-            "-WindowStyle", "Hidden",
-            "-Command", searxng_cmd
-        ],
+        ["powershell.exe", "-NoProfile", "-ExecutionPolicy", "Bypass", "-WindowStyle", "Hidden", "-Command", searxng_cmd],
         stdout=open(LOG_FILES["searxng"], "a", encoding='utf-8'),
         stderr=subprocess.STDOUT,
         text=True,
@@ -174,16 +178,10 @@ try:
     )
     processes.append(searxng_proc)
 
-    # 🔹 Backend — Uses FULL PATH
+    # 🔹 Backend
     backend_cmd = f'cd "{base_dir}\\python-agents"; $env:PYTHONIOENCODING="utf-8"; $env:PYTHONLEGACYWINDOWSSTDIO="utf-8"; uvicorn main:app --host 127.0.0.1 --port 8000 --reload --log-level debug'
     backend_proc = subprocess.Popen(
-        [
-            "powershell.exe",
-            "-NoProfile",
-            "-ExecutionPolicy", "Bypass",
-            "-WindowStyle", "Hidden",
-            "-Command", backend_cmd
-        ],
+        ["powershell.exe", "-NoProfile", "-ExecutionPolicy", "Bypass", "-WindowStyle", "Hidden", "-Command", backend_cmd],
         stdout=open(LOG_FILES["backend"], "a", encoding='utf-8'),
         stderr=subprocess.STDOUT,
         text=True,
@@ -191,16 +189,10 @@ try:
     )
     processes.append(backend_proc)
 
-    # 🔹 Frontend — Uses FULL PATH
+    # 🔹 Frontend
     frontend_cmd = f'cd "{base_dir}\\OSS_UI"; npm run electron-dev'
     frontend_proc = subprocess.Popen(
-        [
-            "powershell.exe",
-            "-NoProfile",
-            "-ExecutionPolicy", "Bypass",
-            "-WindowStyle", "Hidden",
-            "-Command", frontend_cmd
-        ],
+        ["powershell.exe", "-NoProfile", "-ExecutionPolicy", "Bypass", "-WindowStyle", "Hidden", "-Command", frontend_cmd],
         stdout=open(LOG_FILES["frontend"], "a", encoding='utf-8'),
         stderr=subprocess.STDOUT,
         text=True,
@@ -218,8 +210,7 @@ try:
     else:
         print("❌ Frontend did not start within 5 seconds. Terminating all services...\n")
         for proc in processes:
-            if proc.poll() is None:
-                proc.terminate()
+            kill_process_tree(proc)
         sys.exit(1)
 
     # === MONITOR FRONTEND FOREVER ===
@@ -227,25 +218,24 @@ try:
         if not is_port_open(FRONTEND_HOST, PORTS["frontend"]):
             print("⚠️ Frontend became unreachable. Shutting down all services.")
             for proc in processes:
-                if proc.poll() is None:
-                    proc.terminate()
+                kill_process_tree(proc)
             sys.exit(1)
         time.sleep(5)
 
 except KeyboardInterrupt:
     print("\n🛑 Ctrl+C detected. Cleaning up...")
     for proc in processes:
-        if proc.poll() is None:
-            proc.terminate()
+        kill_process_tree(proc)
     sys.exit(0)
 
 except Exception as e:
     print(f"\n❌ Unexpected error: {e}")
     for proc in processes:
-        if proc.poll() is None:
-            proc.terminate()
+        kill_process_tree(proc)
     sys.exit(1)
 
 finally:
     print("✅ Cleanup complete. Exiting.")
+    for proc in processes:
+        kill_process_tree(proc)
     sys.exit(0)
