@@ -116,6 +116,11 @@ OSS_Lab/
 ├── OSS_UI/                 # Frontend (Next.js + Electron)
 ├── python-agents/          # Backend (FastAPI + AI Agents)
 ├── searxng-master/         # Search Engine (SearXNG)
+├── run.bat                 # One Click launcher
+├── run_all.py              # Auto Launcher manager
+├── README.md               # General Docment
+├── OSS_Lab Installation    # Installation instructions
+|    & Setup Guide.md
 └── .gitignore              # Git ignore rules
 ```
 
@@ -190,5 +195,6 @@ pip install -r requirements.txt
 
 
 ```
+
 
 
