@@ -167,6 +167,6 @@ We welcome contributions to OSS_Lab! Here's how to get started:
 
 *Empowering researchers, students, and innovators worldwide*
 
-[![Watch Demo]( https://img.shields.io/badge/ ▶️%20Watch%20Demo-YouTube-red?style=for-the-badge)](https://youtu.be/Bpcilc9F40I?si=WTcL1B_rf89mRYjr)
+[![Watch Demo](https://img.shields.io/badge/▶️%20Watch%20Demo-YouTube-red?style=for-the-badge)](https://youtu.be/Bpcilc9F40I?si=WTcL1B_rf89mRYjr)
 
 </div>
