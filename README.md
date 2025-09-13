@@ -137,10 +137,10 @@ We welcome contributions to OSS_Lab! Here's how to get started:
 ### Development Setup
 
 1. Fork the repository.
-2. Create a feature branch: `git checkout -b feature/amazing-feature`
+2. Create a feature branch: `git checkout -b OSS_Lab`
 3. Make your changes.
 4. Commit your changes: `git commit -m 'Add amazing feature'`
-5. Push to the branch: `git push origin feature/amazing-feature`
+5. Push to the branch: `git push origin OSS_Lab`
 6. Open a Pull Request.
 
 ### Contribution Guidelines
