@@ -1,7 +1,7 @@
 <div align="center">
-  # OSS_Lab - AI Research Assistant Platform
-</div>
 
+# OSS_Lab - AI Research Assistant Platform
+</div>
 <div align="center">
 
 **Democratizing AI research with an open-source, full-stack platform powered by open-source LLMs**
