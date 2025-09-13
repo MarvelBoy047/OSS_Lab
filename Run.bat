@@ -1,9 +1,27 @@
 @echo off
-:: Batch file to run Python script silently (no terminal window)
+:: ================================================
+:: run.bat - Launch OSS_LABS (Simple Version)
+:: ================================================
 
-:: Path to your Python script
-set PY_SCRIPT=run_all.py
+echo.
+echo Checking for required tools...
+where python >nul
+if %errorlevel% neq 0 (
+    echo ❌ Python not found. Please install Python from https://python.org
+    pause
+    exit /b 1
+)
 
-:: Use Windows Script Host to launch Python silently
-:: This hides the console window completely
-start "" wscript //B //E:vbscript "%~dp0invisible_launcher.vbs"
+where node >nul
+if %errorlevel% neq 0 (
+    echo ❌ Node.js not found. Please install Node.js from https://nodejs.org
+    pause
+    exit /b 1
+)
+
+echo ✅ Python and Node.js detected. Starting OSS_LABS...
+echo.
+
+python run_all.py
+
+pause
