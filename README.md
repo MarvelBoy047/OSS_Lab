@@ -1,4 +1,6 @@
+<div align="center">
 # OSS_Lab - AI Research Assistant Platform
+</div>
 
 <div align="center">
 
