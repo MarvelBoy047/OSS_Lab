@@ -7,7 +7,7 @@ let mainWindow;
 
 function createWindow() {
   console.log('Creating main window...');
-  
+
   mainWindow = new BrowserWindow({
     width: 1400,
     height: 900,
@@ -42,6 +42,7 @@ function createWindow() {
   });
 
   mainWindow.on('closed', () => {
+    console.log('❌ Main window closed.');
     mainWindow = null;
   });
 
@@ -52,6 +53,17 @@ function createWindow() {
 
   console.log('Main window created successfully');
 }
+
+// Handle uncaught exceptions (prevent hanging)
+process.on('uncaughtException', (error) => {
+  console.error('⚠️ Uncaught Exception:', error);
+  app.quit();
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('⚠️ Unhandled Rejection at:', promise, 'reason:', reason);
+  app.quit();
+});
 
 app.whenReady().then(() => {
   console.log('Electron app is ready');
@@ -64,10 +76,16 @@ app.whenReady().then(() => {
   });
 });
 
+// 👇 CRITICAL FIX: Force quit AND exit Node.js process
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
+  console.log('🛑 All windows closed. Forcing app quit...');
+  app.quit();
+
+  // Safety net: force kill after 2 seconds if still alive
+  setTimeout(() => {
+    console.log('⏳ Forcing hard exit after 2 seconds...');
+    process.exit(0);
+  }, 2000);
 });
 
 app.on('web-contents-created', (event, contents) => {
@@ -110,7 +128,6 @@ ipcMain.handle('select-dataset-file', async () => {
 
 // ADD MISSING IPC HANDLERS:
 
-// File dialog handler
 ipcMain.handle('dialog:openFile', async () => {
   const result = await dialog.showOpenDialog(mainWindow, {
     properties: ['openFile'],
@@ -121,7 +138,6 @@ ipcMain.handle('dialog:openFile', async () => {
   return result.filePaths;
 });
 
-// Get file stats handler
 ipcMain.handle('fs:getFileStats', async (event, filePath) => {
   try {
     const stats = fs.statSync(filePath);
@@ -135,7 +151,6 @@ ipcMain.handle('fs:getFileStats', async (event, filePath) => {
   }
 });
 
-// Process file path from webUtils
 ipcMain.handle('process-file-path', async (event, fileData) => {
   const { absolutePath, fileName, fileSize } = fileData;
   
