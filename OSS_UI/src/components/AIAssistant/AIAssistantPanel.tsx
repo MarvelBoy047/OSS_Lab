@@ -959,6 +959,15 @@ export function AIAssistantPanel() {
     }
   }, [setIsInputEnabled]);
 
+  // 👇 NEW CODE — ADD THIS BLOCK BELOW THE ABOVE useEffect
+  useEffect(() => {
+    // When returning to a chat (chatId changes), ensure input is enabled
+    if (chatId) {
+      setIsInputEnabled(true);
+    }
+  }, [chatId, setIsInputEnabled]);
+  // 👆 END OF NEW CODE
+
   if (isLoading && !initialHistory) {
     return (
       <div className="flex-1 flex items-center bg-[var(--ai-panel-bg)] border-l border-[var(--ai-panel-border)]">
