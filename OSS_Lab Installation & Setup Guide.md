@@ -8,6 +8,7 @@
 - **Node.js v22.15.0** - [Download](https://nodejs.org/dist/v22.15.0/node-v22.15.0-x64.msi)
 - **Python 3.11.9** - [Download](https://www.python.org/ftp/python/3.11.9/python-3.11.9-amd64.exe)
 - **Git** - [Download](https://git-scm.com/download/win)
+- **API** - [Obtain key](https://console.groq.com/keys)
 
 ### System Requirements
 - **OS**: Windows 10/11 (64-bit)
@@ -195,6 +196,7 @@ pip install -r requirements.txt
 
 
 ```
+
 
 
 
