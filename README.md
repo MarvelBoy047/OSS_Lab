@@ -4,7 +4,7 @@
 
 ![OSS_Lab Logo](./assets/logo.png)
 
-**Democratizing AI research with an open-source, full-stack platform powered by OpenAI's gpt-oss models**
+**Democratizing AI research with an open-source, full-stack platform powered by open-source LLMs**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
@@ -17,24 +17,46 @@
 
 [![OSS_Lab Demo - AI Research Assistant Platform](https://img.youtube.com/vi/Bpcilc9F40I/maxresdefault.jpg)](https://youtu.be/Bpcilc9F40I?si=WTcL1B_rf89mRYjr)
 
-> **Watch the complete demo**: See OSS_Lab in action - from simple conversations to automated Jupyter notebook generation with gpt-oss-120b models!
+> [!NOTE]
+> **Watch the complete demo**: See OSS_Lab in action - from simple conversations to automated Jupyter notebook generation with Llama-3-70B models!
 
 ## 🌟 Overview
 
-OSS_Lab is a comprehensive AI research platform that combines the power of OpenAI's gpt-oss models with intuitive interfaces and automated analysis workflows. Transform complex data analysis into interactive notebooks and insights with just a conversation.
+OSS_Lab is a comprehensive AI research platform that combines the power of open-source LLMs with intuitive interfaces and automated analysis workflows. Transform complex data analysis into interactive notebooks and insights with just a conversation.
 
 ### ✨ Key Features
 
-- 🤖 **AI-Powered Chat Interface** - Stream responses from gpt-oss-120b in real-time
-- 📊 **Automated Notebook Generation** - AI creates Jupyter notebooks from conversations  
-- 🎨 **Professional UI/UX** - Dark/light themes with responsive design
-- 🔍 **Integrated Search** - SearXNG integration for enhanced research capabilities
-- 📁 **Multi-Format Support** - Handle CSV, JSON, Excel, and notebook files
-- ⚡ **Real-Time Updates** - WebSocket architecture for instant responses
+- 🤖 **AI-Powered Chat Interface** - Stream responses from Llama-3-70B in real-time.
+- 📊 **Automated Notebook Generation** - Let the AI create complete Jupyter notebooks from your conversations.
+- 🎨 **Professional UI/UX** - Thoughtfully designed interface with dark/light themes and responsive layouts.
+- 🔍 **Integrated Web Search** - Enhance your research with built-in web search capabilities.
+- 📁 **Multi-Format Support** - Handle CSV, JSON, Excel, and notebook files with ease.
+- ⚡ **Real-Time Updates** - WebSocket architecture ensures instant, streaming responses from the AI.
 
 ## 🚀 Quick Start
-# Given at 
-[OSS_Lab Installation & Setup Guide.md](https://github.com/MarvelBoy047/OSS_Lab/blob/c9f850cedd75e003692184005094c7b82c0b6451/OSS_Lab%20Installation%20%26%20Setup%20Guide.md)
+
+> [!IMPORTANT]
+> To use OSS_Lab quickly, simply double-click on the `run.bat` file in the main directory. This script handles the complete setup and launches the application for you.
+
+## 🗺️ Roadmap
+
+Here is the current status of our key features and future development goals.
+
+- ✅ Dataset reference through select datasets button
+- ✅ Chat with web search
+- ✅ Settings page
+- ✅ Discover page
+- ✅ Dashboard minimal build
+- ✅ Notebook generation
+- ✅ Realtime system vital monitor
+- ❌ Dashboard accurate data
+- ❌ Chat with reference documents (RAG)
+- ❌ Presentation generation
+- ❌ Multiple providers (only GROQ)
+- ❌ Token and temperature control
+
+> [!TIP]
+> Want to help bring the unchecked features to life? We welcome contributions! See our [Contributing](#-contributing) section to get started.
 
 ## 🏗️ Architecture
 
@@ -63,51 +85,50 @@ OSS_UI/
 ```
 
 ### Search Engine (`searxng-master/`)
-- Privacy-focused search engine
-- Provides enhanced web search capabilities
-- Integrates with the main application for research queries
+- Privacy-focused, hackable metasearch engine.
+- Provides enhanced web search capabilities for research queries.
 
 ## 🤖 AI Integration
 
-### gpt-oss Model Usage
+### LLM Integration
 
-OSS_Lab leverages OpenAI's gpt-oss-120b model through the Groq API for:
+OSS_Lab leverages high-performance open-source models like **Llama-3-70B** through the Groq API for:
 
-- **Conversational AI**: Natural language interactions with context awareness
-- **Code Generation**: Automatic creation of analysis scripts and notebooks
-- **Data Analysis**: Intelligent interpretation of datasets and trends
-- **Research Assistance**: Comprehensive answers with web search integration
+- **Conversational AI**: Natural language interactions with context awareness.
+- **Code Generation**: Automatic creation of analysis scripts and notebooks.
+- **Data Analysis**: Intelligent interpretation of datasets and trends.
+- **Research Assistance**: Comprehensive answers with integrated web search.
 
 ### Example Workflow
 
-1. **Upload Data**: Drop a CSV file into the chat interface
-2. **Ask Questions**: "Analyze this sales data and show trends"
-3. **Get Insights**: AI generates analysis and creates a Jupyter notebook
-4. **Explore Results**: Interactive notebook with code, visualizations, and explanations
+1. **Upload Data**: Drop a CSV file into the chat interface.
+2. **Ask Questions**: "Analyze this sales data and show trends".
+3. **Get Insights**: The AI generates analysis and creates a Jupyter notebook.
+4. **Explore Results**: Open the interactive notebook with code, visualizations, and explanations.
 
 ## 📖 Usage Guide
 
 ### Basic Chat
 
-1. Open http://localhost:3000
-2. Start typing in the chat interface
-3. AI responds using gpt-oss models
-4. Upload files for analysis by clicking the paperclip icon
+1. The application will open at `http://localhost:3000`.
+2. Start typing in the chat interface to get answers from the AI.
+3. Upload files for analysis by clicking the paperclip icon.
 
 ### Data Analysis
 
-1. Upload a CSV, JSON, or Excel file
-2. Ask questions about your data
-3. AI automatically generates analysis code
-4. View results in the integrated notebook viewer
-5. Export notebooks for sharing
+1. Upload a CSV, JSON, or Excel file.
+2. Ask questions about your data (e.g., "Find the correlation between column A and B").
+3. The AI will automatically generate analysis code and a notebook.
+4. View results in the integrated notebook viewer and export for sharing.
 
 ### Settings Configuration
 
-1. Navigate to Settings in the sidebar
-2. Enter your Groq API key  
-3. Configure AI features and preferences
-4. Choose between light and dark themes
+> [!NOTE]
+> Your Groq API key is required to power the AI features. You can get a free key from [Groq](https://console.groq.com/keys).
+
+1. Navigate to **Settings** in the sidebar.
+2. Enter your Groq API key.
+3. Configure AI features and choose between light and dark themes.
 
 ## 🤝 Contributing
 
@@ -115,35 +136,24 @@ We welcome contributions to OSS_Lab! Here's how to get started:
 
 ### Development Setup
 
-1. Fork the repository
+1. Fork the repository.
 2. Create a feature branch: `git checkout -b feature/amazing-feature`
-3. Make your changes
-4. Add tests if applicable
-5. Commit your changes: `git commit -m 'Add amazing feature'`
-6. Push to the branch: `git push origin feature/amazing-feature`
-7. Open a Pull Request
+3. Make your changes.
+4. Commit your changes: `git commit -m 'Add amazing feature'`
+5. Push to the branch: `git push origin feature/amazing-feature`
+6. Open a Pull Request.
 
 ### Contribution Guidelines
 
-- Follow existing code style and conventions
-- Add tests for new functionality
-- Update documentation as needed
-- Ensure all tests pass before submitting
-
-### Areas for Contribution
-
-- **AI Models**: Integration with additional open-source models
-- **UI Components**: New visualization and interaction patterns  
-- **Analysis Tools**: Specialized modules for different research domains
-- **Documentation**: Tutorials, guides, and examples
-
+- Follow existing code style and conventions.
+- Add tests for new functionality where applicable.
+- Update documentation as needed.
 
 ## 🙏 Acknowledgments
 
-- **OpenAI** for the incredible gpt-oss models
-- **Groq** for ultra-fast inference infrastructure  
-- **SearXNG** for privacy-focused search capabilities
-- **The open-source community** for the amazing tools and libraries
+- **Groq** for providing ultra-fast inference infrastructure for open-source models.
+- **SearXNG** for its powerful, privacy-focused search capabilities.
+- **The open-source community** for creating the amazing tools and libraries that make this project possible.
 
 ## 📞 Support
 
@@ -155,11 +165,10 @@ We welcome contributions to OSS_Lab! Here's how to get started:
 
 <div align="center">
 
-**Built with ❤️ for the OpenAI Open Model Hackathon 2025**
+**Built with ❤️ for the open-source community.**
 
-*Empowering researchers, students, and innovators worldwide*
+*Empowering researchers, students, and innovators worldwide.*
 
-[![Watch Demo](https://img.shields.io/badge/▶️%20Watch%20Demo-YouTube-red?style=for-the-badge)](https://youtu.be/Bpcilc9F40I?si=WTcL1B_rf89mRYjr)
+[![Watch Demo](https://img.shields.io/badge/ ▶️%20Watch%20Demo-YouTube-red?style=for-the-badge)](https://youtu.be/Bpcilc9F40I?si=WTcL1B_rf89mRYjr)
 
 </div>
-
