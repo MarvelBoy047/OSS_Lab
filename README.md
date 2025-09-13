@@ -2,8 +2,6 @@
 
 <div align="center">
 
-![OSS_Lab Logo](./assets/logo.png)
-
 **Democratizing AI research with an open-source, full-stack platform powered by open-source LLMs**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -165,10 +163,10 @@ We welcome contributions to OSS_Lab! Here's how to get started:
 
 <div align="center">
 
-**Built with ❤️ for the open-source community.**
+**Built with ❤️ for the OpenAI Open Model Hackathon 2025**
 
-*Empowering researchers, students, and innovators worldwide.*
+*Empowering researchers, students, and innovators worldwide*
 
-![Watch Demo](https://img.shields.io/badge/ ▶️%20Watch%20Demo-YouTube-red?style=for-the-badge)
+[![Watch Demo]( https://img.shields.io/badge/ ▶️%20Watch%20Demo-YouTube-red?style=for-the-badge)](https://youtu.be/Bpcilc9F40I?si=WTcL1B_rf89mRYjr)
+
 </div>
-
