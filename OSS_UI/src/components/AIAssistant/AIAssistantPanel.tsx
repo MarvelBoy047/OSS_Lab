@@ -107,25 +107,61 @@ const FileUploadCard = ({ file, onRemove }: { file: UploadedFile; onRemove: (id:
   );
 };
 
+
 // Enhanced Chat Manager Hook
 function useChatManager() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
   
-  // 🚨 FIX: Prevent hydration mismatch - initialize as empty string
   const [chatId, setChatId] = useState('');
   const [initialHistory, setInitialHistory] = useState<AgentMessage[] | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isInputEnabled, setIsInputEnabled] = useState(true);
 
-  // 🚨 FIX: Load chatId only on client side to prevent hydration mismatch
+  // A ref to track the previous state of the chatId
+  const prevChatIdRef = useRef(chatId);
+
+  // A stable reset function we can call from anywhere
+  const resetChat = useCallback(() => {
+    console.log('🔄 Resetting chat state');
+    setChatId('');
+    setInitialHistory([]);
+    setIsInputEnabled(true);
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('activeChatId');
+      localStorage.removeItem('activeNotebookId');
+      
+      const bc = new BroadcastChannel('osslab-chat');
+      bc.postMessage({ type: 'reset' });
+      bc.close();
+    }
+  }, []);
+
+  // Load chatId from localStorage on initial mount
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const storedChatId = localStorage.getItem('activeChatId') || '';
       setChatId(storedChatId);
     }
   }, []);
+
+  // ✅ MODIFIED: This effect now broadcasts the new chatId with the event
+  useEffect(() => {
+    // This detects a transition from "no chat" to "a new chat"
+    if (prevChatIdRef.current === '' && chatId) {
+      console.log(`🎉 New chat created (${chatId}). Broadcasting "chat_list_updated".`);
+      
+      if (typeof window !== 'undefined' && 'BroadcastChannel' in window) {
+        const channel = new BroadcastChannel('osslab-chat');
+        // We now send the new chatId in the message payload
+        channel.postMessage({ type: 'chat_list_updated', chatId: chatId });
+        channel.close();
+      }
+    }
+    // Update the ref for the next render
+    prevChatIdRef.current = chatId;
+  }, [chatId]);
 
   // Load conversation data when chatId changes
   useEffect(() => {
@@ -141,7 +177,6 @@ function useChatManager() {
 
     const loadConversation = async () => {
       try {
-        console.log(`📥 Loading conversation: ${chatId}`);
         const response = await fetch(`${API_BASE}/api/conversation/${encodeURIComponent(chatId)}`);
         
         if (!response.ok) {
@@ -157,18 +192,20 @@ function useChatManager() {
         }));
 
         if (!ignore) {
-          console.log(`✅ Loaded ${messages.length} messages for chat: ${chatId}`);
           setInitialHistory(messages);
-          
-          if (data.has_notebook) {
-            await loadNotebookData(chatId);
-          }
+          if (data.has_notebook) await loadNotebookData(chatId);
         }
-      } catch (error) {
+      } catch (error: any) {
+        // ✅ THIS FIXES THE 404 ERROR
         console.error('❌ Failed to load conversation:', error);
         if (!ignore) {
-          setInitialHistory([]);
-          toast.error('Failed to load conversation');
+          if (error.message && error.message.includes('404')) {
+            toast.error('Active chat not found. It may have been deleted.');
+            resetChat(); // Gracefully reset the chat panel to the default state
+          } else {
+            toast.error('Failed to load conversation');
+            setInitialHistory([]);
+          }
         }
       } finally {
         if (!ignore) {
@@ -180,7 +217,7 @@ function useChatManager() {
 
     loadConversation();
     return () => { ignore = true; };
-  }, [chatId]);
+  }, [chatId, resetChat]);
 
   // Handle URL-based chat switching  
   useEffect(() => {
@@ -193,25 +230,6 @@ function useChatManager() {
     }
   }, [searchParams, chatId]);
 
-  // Listen for file upload events and ensure input stays enabled
-  useEffect(() => {
-    const handleFileUpload = () => {
-      console.log('🔄 File upload detected - ensuring input stays enabled');
-      setIsInputEnabled(true);
-    };
-
-    if (typeof window !== 'undefined' && 'BroadcastChannel' in window) {
-      const fileChannel = new BroadcastChannel('osslab-files');
-      fileChannel.onmessage = (evt) => {
-        if (evt?.data?.type === 'files_added') {
-          handleFileUpload();
-        }
-      };
-      
-      return () => fileChannel.close();
-    }
-  }, []);
-
   // Handle cross-tab communication
   useEffect(() => {
     if (typeof window === 'undefined' || !('BroadcastChannel' in window)) return;
@@ -219,20 +237,14 @@ function useChatManager() {
     const bc = new BroadcastChannel('osslab-chat');
     bc.onmessage = (evt) => {
       if (evt?.data?.type === 'switch' && evt.data.chatId !== chatId) {
-        console.log(`🔄 Switching to chat: ${evt.data.chatId}`);
         setChatId(evt.data.chatId);
         localStorage.setItem('activeChatId', evt.data.chatId);
-        setIsInputEnabled(true);
       } else if (evt?.data?.type === 'reset') {
-        console.log('🔄 Resetting chat');
-        setChatId('');
-        setInitialHistory([]);
-        localStorage.removeItem('activeChatId');
-        setIsInputEnabled(true);
+        resetChat();
       }
     };
     return () => bc.close();
-  }, [chatId]);
+  }, [chatId, resetChat]);
 
   return {
     chatId,
@@ -242,22 +254,7 @@ function useChatManager() {
     isLoading,
     isInputEnabled,
     setIsInputEnabled,
-    resetChat: () => {
-      console.log('🔄 Resetting chat state');
-      setChatId('');
-      setInitialHistory([]);
-      setIsInputEnabled(true);
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('activeChatId');
-        localStorage.removeItem('activeNotebookId');
-      }
-      
-      if (typeof window !== 'undefined' && 'BroadcastChannel' in window) {
-        const bc = new BroadcastChannel('osslab-chat');
-        bc.postMessage({ type: 'reset' });
-        bc.close();
-      }
-    }
+    resetChat,
   };
 }
 
