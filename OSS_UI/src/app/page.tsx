@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { formatTimeDifference } from '@/lib/utils';
 import { cn } from '@/lib/utils';
 import NotebookDisplay from '@/components/NotebookDisplay';
@@ -21,7 +21,7 @@ interface APIResponse {
   total_datasets: number;
 }
 
-// Hardcoded purple glow style
+// Hardcoded purple glow style - no changes needed
 const purpleGlowStyle = {
   boxShadow: '0 0 20px 8px rgba(139, 92, 246, 0.9), 0 0 30px 12px rgba(139, 92, 246, 0.6), 0 0 40px 16px rgba(139, 92, 246, 0.3)',
   border: '2px solid rgba(139, 92, 246, 0.9)',
@@ -32,6 +32,7 @@ const purpleGlowStyle = {
   position: 'relative' as const,
 };
 
+// EmptyState component - no changes needed
 const EmptyState = ({ title, message, icon }: { title: string; message: string; icon: string }) => (
   <div className="flex flex-col items-center justify-center h-full text-center text-[var(--text-secondary)] p-10">
     <span className="material-symbols-outlined text-6xl mb-4 text-[var(--text-secondary)]">{icon}</span>
@@ -49,144 +50,94 @@ const HomePage = () => {
   const [totalDatasets, setTotalDatasets] = useState(0);
   const [connectionStatus, setConnectionStatus] = useState<'connecting' | 'connected' | 'error'>('connecting');
 
-  // ✅ Get API base URL with fallback
   const getApiBase = () => process.env.NEXT_PUBLIC_BACKEND_URL || 'http://127.0.0.1:8000';
 
-  // ✅ Handle URL-based chat switching from redirects
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const urlParams = new URLSearchParams(window.location.search);
-      const chatIdFromUrl = urlParams.get('chatId');
-      
-      if (chatIdFromUrl) {
-        console.log(`🔄 Processing chatId from URL: ${chatIdFromUrl}`);
-        loadConversation(chatIdFromUrl);
-        
-        // Clean URL after processing
-        window.history.replaceState({}, '', '/');
-      } else {
-        // Get stored chat ID if no URL param
-        const storedChatId = localStorage.getItem('activeChatId');
-        if (storedChatId) {
-          setActiveChatId(storedChatId);
-          console.log(`📂 Restored active chat: ${storedChatId}`);
-        }
-      }
-    }
-  }, []);
-
-  // ✅ Test backend connection
-  const testBackendConnection = async () => {
+  const testBackendConnection = useCallback(async () => {
     try {
       const response = await fetch(`${getApiBase()}/api/health`, {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-        }
+        method: 'GET', headers: { 'Accept': 'application/json' },
       });
-
       if (response.ok) {
-        const data = await response.json();
-        console.log('✅ Backend health check:', data);
         setConnectionStatus('connected');
         return true;
-      } else {
-        console.error('❌ Backend health check failed:', response.status);
-        setConnectionStatus('error');
-        return false;
       }
+      setConnectionStatus('error');
+      return false;
     } catch (error) {
-      console.error('❌ Backend connection error:', error);
       setConnectionStatus('error');
       return false;
     }
-  };
+  }, []);
 
-  // ✅ Fetch conversations from your backend
+  const fetchDashboardData = useCallback(async () => {
+    const isConnected = await testBackendConnection();
+    if (!isConnected) {
+      setIsLoading(false);
+      return;
+    }
+    try {
+      const response = await fetch(`${getApiBase()}/api/conversations`);
+      if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      const data: APIResponse = await response.json();
+      setChats(data.conversations || []);
+      setTotalExperiments(data.total_experiments || 0);
+      setTotalDatasets(data.total_datasets || 0);
+    } catch (error) {
+      console.error('❌ Failed to fetch conversations:', error);
+      setConnectionStatus('error');
+    } finally { 
+      setIsLoading(false); 
+    }
+  }, [testBackendConnection]);
+
   useEffect(() => {
-    const fetchChats = async () => {
-      setIsLoading(true);
-      
-      // Test connection first
-      const isConnected = await testBackendConnection();
-      if (!isConnected) {
-        setIsLoading(false);
-        return;
-      }
+    setIsLoading(true);
+    const storedChatId = localStorage.getItem('activeChatId');
+    setActiveChatId(storedChatId);
+    fetchDashboardData();
+  }, [fetchDashboardData]);
 
-      try {
-        const API_BASE = getApiBase();
-        console.log(`📡 Fetching conversations from: ${API_BASE}/api/conversations`);
-        
-        const response = await fetch(`${API_BASE}/api/conversations`, {
-          method: 'GET',
-          headers: {
-            'Accept': 'application/json',
-          }
-        });
-        
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        }
-        
-        const data: APIResponse = await response.json();
-        console.log('📊 Backend response:', data);
-        
-        setChats(data.conversations || []);
-        setTotalExperiments(data.total_experiments || 0);
-        setTotalDatasets(data.total_datasets || 0);
-        
-        console.log(`✅ Loaded ${data.conversations?.length || 0} conversations`);
-        
-      } catch (error) {
-        console.error('❌ Failed to fetch conversations:', error);
-        setConnectionStatus('error');
-      } finally { 
-        setIsLoading(false); 
+  // ✅ THIS IS THE CORRECTED LISTENER LOGIC
+  useEffect(() => {
+    if (typeof window === 'undefined' || !('BroadcastChannel' in window)) return;
+    const channel = new BroadcastChannel('osslab-chat');
+
+    const handleMessage = (event: MessageEvent) => {
+      // This event is sent when a NEW chat is created.
+      if (event.data?.type === 'chat_list_updated' && event.data.chatId) {
+        console.log('🔄 Dashboard: Detected new chat. Refreshing data and setting active ID.');
+        fetchDashboardData(); // Re-fetch the list, which updates experiments count.
+        setActiveChatId(event.data.chatId); // This updates the UI to show the new chat as active.
+      }
+      // This event is sent when an EXISTING chat is clicked on.
+      else if (event.data?.type === 'switch' && event.data.chatId) {
+        console.log('🔄 Dashboard: Switched active chat.');
+        setActiveChatId(event.data.chatId); // This updates the highlight.
       }
     };
     
-    fetchChats();
-  }, []);
+    channel.addEventListener('message', handleMessage);
+    return () => {
+      channel.removeEventListener('message', handleMessage);
+      channel.close();
+    };
+  }, [fetchDashboardData]); // Depend on fetchDashboardData to ensure the listener always has the latest function.
 
-  // ✅ Load conversation with backend integration
   const loadConversation = async (chatId: string) => {
     try {
-      console.log(`🔄 Loading conversation: ${chatId}`);
-      
-      // Update local state immediately
       localStorage.setItem('activeChatId', chatId);
-      localStorage.setItem('activeChatId:updatedAt', String(Date.now()));
-      setActiveChatId(chatId);
-      
-      // Broadcast to other components
+      setActiveChatId(chatId); // Update local state for immediate feedback
       if ('BroadcastChannel' in window) {
         const bc = new BroadcastChannel('osslab-chat');
-        bc.postMessage({
-          type: 'switch',
-          chatId: chatId
-        });
+        bc.postMessage({ type: 'switch', chatId: chatId });
         bc.close();
       }
-      
-      // Fetch conversation details from backend
-      const API_BASE = getApiBase();
-      const response = await fetch(`${API_BASE}/api/conversation/${chatId}`, {
-        headers: { 'Accept': 'application/json' }
-      });
-      
-      if (response.ok) {
-        const conversationData = await response.json();
-        console.log(`✅ Loaded conversation details:`, conversationData);
-      } else {
-        console.warn(`⚠️ Conversation ${chatId} not found in backend`);
-      }
-      
     } catch (error) {
       console.error('❌ Error loading conversation:', error);
     }
   };
-
+  
+  // No changes are needed for renderContent or the return JSX.
   const renderContent = () => {
     switch (activeTab) {
       case 'notebook': 
@@ -202,7 +153,6 @@ const HomePage = () => {
       default: 
         return (
           <div className="flex-1 space-y-8 pb-6">
-            {/* Connection Status Banner */}
             {connectionStatus !== 'connected' && (
               <div className={`p-4 rounded-lg border ${
                 connectionStatus === 'connecting' 
