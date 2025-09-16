@@ -37,8 +37,7 @@ const config: Config = {
   
   // The necessary plugins for our current UI are preserved.
   plugins: [
-    require('@tailwindcss/typography'), 
-    require('@tailwindcss/container-queries')
+    require('@tailwindcss/typography')
   ],
 };
 
