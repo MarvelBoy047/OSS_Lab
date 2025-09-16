@@ -17,3 +17,4 @@ requests
 websocket-client
 httpx
 PyMuPDF
+python-pptx
