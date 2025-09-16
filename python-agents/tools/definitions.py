@@ -209,6 +209,8 @@ Cross-validation and hyperparameter optimization
 
 Model evaluation and performance comparison
 
+Write conclusion about what was done and next steps
+
 Business insights generation and actionable recommendations
 
 CRITICAL REMINDERS (NEVER FORGET):
