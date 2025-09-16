@@ -76,18 +76,14 @@ const useSystemStats = () => {
 
     const checkBackendStatus = async () => {
       try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 5000);
-        
+        // REMOVED: AbortController and timeout logic to allow the backend
+        // to take as long as it needs to respond without terminating the connection.
         const response = await fetch(`${API_BASE}/`, { 
           method: 'GET',
-          signal: controller.signal,
           headers: {
             'Accept': 'application/json',
           }
         });
-        
-        clearTimeout(timeoutId);
         
         if (response.ok) {
           console.log('✅ Backend connected successfully');
@@ -98,6 +94,7 @@ const useSystemStats = () => {
         }
         
       } catch (error) {
+        // This will now only catch genuine network errors, not the AbortError.
         console.error('❌ Backend connectivity check failed:', error);
         setStats(prev => ({ ...prev, isOnline: false }));
       }
