@@ -2,7 +2,7 @@
 
 import DeleteChat from '@/components/DeleteChat';
 import { BookOpenText } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react'; // ✅ ADDED: useCallback
 import { parseISO, formatDistanceToNow } from 'date-fns';
 
 export interface Chat {
@@ -50,34 +50,65 @@ const Page = () => {
     }
   }, []);
 
+  // ✅ MODIFIED: The logic to fetch chats is now wrapped in useCallback
+  // This allows us to reuse the function in multiple useEffects without issues.
+  const fetchChats = useCallback(async () => {
+    // We don't set loading to true here for background refreshes
+    // to avoid a jarring loading spinner.
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://127.0.0.1:8000'}/api/conversations`);
+      if (!res.ok) throw new Error('Failed to fetch chats');
+      const data = await res.json();
+      setChats(data.conversations || []);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      // Ensure loading is set to false after the first fetch
+      setLoading(false);
+    }
+  }, []);
+
+  // ✅ MODIFIED: This effect now handles the INITIAL data fetch
   useEffect(() => {
-    const fetchChats = async () => {
-      setLoading(true);
-      try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://127.0.0.1:8000'}/api/conversations`);
-        if (!res.ok) throw new Error('Failed to fetch chats');
-        const data = await res.json();
-        setChats(data.conversations || []);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
+    setLoading(true); // Show loading spinner only on the first load
+    fetchChats();
+  }, [fetchChats]);
+
+  // ✅ ADDED: This new useEffect listens for real-time updates
+  // It sets up a listener that calls fetchChats() again when a new chat is created.
+  useEffect(() => {
+    if (typeof window === 'undefined' || !('BroadcastChannel' in window)) {
+      return;
+    }
+
+    const channel = new BroadcastChannel('osslab-chat');
+
+    const handleMessage = (event: MessageEvent) => {
+      // We listen for the event broadcasted by the AIAssistantPanel
+      if (event.data?.type === 'chat_list_updated') {
+        console.log('🔄 Library Page: Detected a new chat. Refreshing list.');
+        fetchChats(); // This re-runs the fetch logic to get the new chat
       }
     };
-    fetchChats();
-  }, []);
+
+    channel.addEventListener('message', handleMessage);
+
+    // This is a cleanup function to prevent memory leaks
+    return () => {
+      channel.removeEventListener('message', handleMessage);
+      channel.close();
+    };
+  }, [fetchChats]); // We include fetchChats as a dependency
 
   // ✅ FIXED: Proper navigation to main dashboard with chat loading
   const loadConversation = (chatId: string) => {
     try {
       console.log(`🔄 Loading conversation: ${chatId}`);
       
-      // Set active chat in localStorage
       localStorage.setItem('activeChatId', chatId);
       localStorage.setItem('activeChatId:updatedAt', String(Date.now()));
       setActiveChatId(chatId);
       
-      // Broadcast chat switch to other components
       if ('BroadcastChannel' in window) {
         const bc = new BroadcastChannel('osslab-chat');
         bc.postMessage({
@@ -87,7 +118,6 @@ const Page = () => {
         bc.close();
       }
       
-      // ✅ Navigate to main dashboard (where AI Assistant panel is)
       window.location.href = '/?chatId=' + encodeURIComponent(chatId);
       
     } catch (error) {
@@ -95,6 +125,7 @@ const Page = () => {
     }
   };
 
+  // The entire JSX return is the same as your original file. No changes needed below.
   return (
     <main className="flex-1 flex flex-col p-6 overflow-hidden">
       <div className="flex-shrink-0">
@@ -131,7 +162,6 @@ const Page = () => {
                 onClick={() => loadConversation(chat.id)}
               >
                 <div className="flex items-center justify-between">
-                  {/* ✅ Removed Link, using onClick instead */}
                   <div className="flex items-center gap-4 flex-1 overflow-hidden">
                     <span className="material-symbols-outlined text-[var(--text-secondary)]">
                       description
@@ -182,9 +212,8 @@ const Page = () => {
                     {chat.has_notebook && (
                       <button
                         onClick={(e) => {
-                          e.stopPropagation(); // Prevent chat loading
+                          e.stopPropagation();
                           loadConversation(chat.id);
-                          // Navigate to notebook tab
                           setTimeout(() => {
                             window.location.href = '/?chatId=' + encodeURIComponent(chat.id) + '&tab=notebook';
                           }, 100);
