@@ -134,7 +134,7 @@ try:
                 free_port_windows(port)
 
     # === PHASE 1: RUN INSTALLS IN PARALLEL (HIDDEN) ===
-    print("\nPHASE 1: Installing dependencies...\n")
+    print("\nPHASE 1: Installing dependencies... This will take lot of time in first run Please wait...\n")
     install_threads = []
 
     # SearXNG Install — hidden
