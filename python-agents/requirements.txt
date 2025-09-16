@@ -16,3 +16,4 @@ python-docx
 requests
 websocket-client
 httpx
+PyMuPDF
