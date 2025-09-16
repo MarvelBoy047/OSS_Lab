@@ -26,7 +26,6 @@ const DeleteChat = ({
   const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // ✅ Get API base URL with fallback
   const getApiBase = () => process.env.NEXT_PUBLIC_BACKEND_URL || 'http://127.0.0.1:8000';
 
   const handleDelete = async () => {
@@ -34,7 +33,6 @@ const DeleteChat = ({
     try {
       const API_BASE = getApiBase();
       
-      // ✅ FIXED: Use correct backend endpoint
       const res = await fetch(`${API_BASE}/api/conversation/${chatId}`, {
         method: 'DELETE',
         headers: {
@@ -44,7 +42,6 @@ const DeleteChat = ({
       });
 
       if (!res.ok) {
-        // ✅ Better error handling with backend response
         let errorMessage = 'Failed to delete chat';
         try {
           const errorData = await res.json();
@@ -55,18 +52,33 @@ const DeleteChat = ({
         throw new Error(errorMessage);
       }
 
-      // ✅ Get success response
-      const result = await res.json();
-      console.log('✅ Delete successful:', result);
+      await res.json();
+      console.log('✅ Delete successful on backend');
 
-      // ✅ Update local state
+      // ✅ --- THIS IS THE CRUCIAL FIX ---
+      // After a successful delete, check if the deleted chat was the active one.
+      const currentActiveChatId = localStorage.getItem('activeChatId');
+      if (currentActiveChatId === chatId) {
+        console.log('🗑️ Deleted the active chat. Clearing activeChatId and broadcasting a reset.');
+        
+        // 1. Remove the stale ID from storage so it won't be loaded again.
+        localStorage.removeItem('activeChatId');
+
+        // 2. Broadcast a "reset" message. The AIAssistantPanel is listening for this.
+        if ('BroadcastChannel' in window) {
+          const bc = new BroadcastChannel('osslab-chat');
+          bc.postMessage({ type: 'reset' });
+          bc.close();
+        }
+      }
+      // ✅ --- END OF FIX ---
+
+      // Update the local UI list on the Library page
       const newChats = chats.filter((chat) => chat.id !== chatId);
       setChats(newChats);
 
-      // ✅ Success feedback
       toast.success('Chat deleted successfully');
 
-      // ✅ Optional redirect
       if (redirect) {
         window.location.href = '/';
       }
@@ -80,12 +92,11 @@ const DeleteChat = ({
     }
   };
 
+  // The JSX for the component remains the same.
   return (
     <>
       <button
-        onClick={() => {
-          setConfirmationDialogOpen(true);
-        }}
+        onClick={() => setConfirmationDialogOpen(true)}
         className="bg-transparent text-red-400 hover:scale-105 transition duration-200 disabled:opacity-50"
         disabled={loading}
         title="Delete chat"
@@ -97,11 +108,7 @@ const DeleteChat = ({
         <Dialog
           as="div"
           className="relative z-50"
-          onClose={() => {
-            if (!loading) {
-              setConfirmationDialogOpen(false);
-            }
-          }}
+          onClose={() => !loading && setConfirmationDialogOpen(false)}
         >
           <DialogBackdrop className="fixed inset-0 bg-black/30" />
           <div className="fixed inset-0 overflow-y-auto">
@@ -125,11 +132,7 @@ const DeleteChat = ({
                   
                   <div className="flex flex-row items-end justify-end space-x-4 mt-6">
                     <button
-                      onClick={() => {
-                        if (!loading) {
-                          setConfirmationDialogOpen(false);
-                        }
-                      }}
+                      onClick={() => !loading && setConfirmationDialogOpen(false)}
                       className="text-black/50 dark:text-white/50 text-sm hover:text-black/70 hover:dark:text-white/70 transition duration-200 disabled:opacity-50"
                       disabled={loading}
                     >
