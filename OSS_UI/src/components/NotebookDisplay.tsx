@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react'; // ✅ ADDED useMemo
 import { usePathname } from 'next/navigation';
 import { useTheme } from 'next-themes';
 import ReactMarkdown from 'react-markdown';
@@ -8,6 +8,7 @@ import { oneDark, oneLight } from 'react-syntax-highlighter/dist/esm/styles/pris
 
 const API_BASE = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://127.0.0.1:8000';
 
+// Interface definitions (no changes needed here)
 interface NotebookOutput {
   output_type: string;
   data?: {
@@ -21,14 +22,12 @@ interface NotebookOutput {
   name?: string;
   execution_count?: number;
 }
-
 interface NotebookCell {
   cell_type: string;
   source: string[];
   outputs?: NotebookOutput[];
   execution_count?: number;
 }
-
 interface NotebookData {
   chat_id: string;
   notebook_file: string;
@@ -41,19 +40,19 @@ interface NotebookData {
 
 function OutputRenderer({ output }: { output: NotebookOutput }) {
   const { theme } = useTheme();
-  
+
   if (output.output_type === 'display_data' || output.output_type === 'execute_result') {
     const data = output.data;
     if (!data) return null;
-    
+
     // Render images (matplotlib plots, etc.)
     if (data['image/png'] || data['image/jpeg']) {
       const imageType = data['image/png'] ? 'png' : 'jpeg';
       const imageData = data[`image/${imageType}`];
-      
+
       return (
         <div className="output-image-container">
-          <img 
+          <img
             src={`data:image/${imageType};base64,${imageData}`}
             alt="Plot output"
             className="max-w-full h-auto rounded-lg shadow-lg border border-[var(--border-primary)] hover-glow transition-all duration-200"
@@ -62,23 +61,23 @@ function OutputRenderer({ output }: { output: NotebookOutput }) {
         </div>
       );
     }
-    
+
     // Render HTML content
     if (data['text/html']) {
       return (
         <div className="output-html-container">
-          <div 
+          <div
             className="bg-[var(--bg-secondary)] p-4 rounded-lg border border-[var(--border-primary)] overflow-auto"
-            dangerouslySetInnerHTML={{ 
-              __html: Array.isArray(data['text/html']) 
-                ? data['text/html'].join('') 
-                : data['text/html'] 
+            dangerouslySetInnerHTML={{
+              __html: Array.isArray(data['text/html'])
+                ? data['text/html'].join('')
+                : data['text/html']
             }}
           />
         </div>
       );
     }
-    
+
     // Render JSON data with syntax highlighting
     if (data['application/json']) {
       return (
@@ -100,13 +99,13 @@ function OutputRenderer({ output }: { output: NotebookOutput }) {
         </div>
       );
     }
-    
+
     // Render plain text
     if (data['text/plain']) {
-      const textContent = Array.isArray(data['text/plain']) 
-        ? data['text/plain'].join('') 
+      const textContent = Array.isArray(data['text/plain'])
+        ? data['text/plain'].join('')
         : data['text/plain'];
-      
+
       return (
         <div className="output-text-container">
           <pre className="bg-[var(--bg-tertiary)] p-4 rounded-lg border border-[var(--border-primary)] text-[var(--text-primary)] text-sm overflow-x-auto whitespace-pre-wrap font-mono">
@@ -116,7 +115,7 @@ function OutputRenderer({ output }: { output: NotebookOutput }) {
       );
     }
   }
-  
+
   // Handle stream output (print statements, etc.)
   if (output.output_type === 'stream') {
     const text = Array.isArray(output.text) ? output.text.join('') : output.text || '';
@@ -136,7 +135,7 @@ function OutputRenderer({ output }: { output: NotebookOutput }) {
       </div>
     );
   }
-  
+
   // Handle error output
   if (output.output_type === 'error') {
     const errorText = Array.isArray(output.text) ? output.text.join('') : output.text || '';
@@ -154,14 +153,14 @@ function OutputRenderer({ output }: { output: NotebookOutput }) {
       </div>
     );
   }
-  
+
   return null;
 }
 
 function CodeCell({ cell, index }: { cell: NotebookCell; index: number }) {
   const { theme } = useTheme();
   const code = Array.isArray(cell.source) ? cell.source.join('') : cell.source;
-  
+
   return (
     <div className="cell-container code-cell">
       <div className="cell-header">
@@ -179,7 +178,7 @@ function CodeCell({ cell, index }: { cell: NotebookCell; index: number }) {
           )}
         </div>
       </div>
-      
+
       <div className="cell-content">
         <div className="code-input-section">
           <SyntaxHighlighter
@@ -198,7 +197,7 @@ function CodeCell({ cell, index }: { cell: NotebookCell; index: number }) {
             {code}
           </SyntaxHighlighter>
         </div>
-        
+
         {cell.outputs && cell.outputs.length > 0 && (
           <div className="code-output-section">
             <div className="output-header">
@@ -219,7 +218,7 @@ function CodeCell({ cell, index }: { cell: NotebookCell; index: number }) {
 
 function MarkdownCell({ cell, index }: { cell: NotebookCell; index: number }) {
   const content = Array.isArray(cell.source) ? cell.source.join('') : cell.source;
-  
+
   return (
     <div className="cell-container markdown-cell">
       <div className="cell-header">
@@ -230,10 +229,10 @@ function MarkdownCell({ cell, index }: { cell: NotebookCell; index: number }) {
           </span>
         </div>
       </div>
-      
+
       <div className="cell-content">
-        <div className="prose prose-sm max-w-none text-[var(--text-primary)] 
-                        prose-headings:text-[var(--text-primary)] 
+        <div className="prose prose-sm max-w-none text-[var(--text-primary)]
+                        prose-headings:text-[var(--text-primary)]
                         prose-p:text-[var(--text-primary)]
                         prose-strong:text-[var(--text-primary)]
                         prose-em:text-[var(--text-primary)]
@@ -301,7 +300,7 @@ function NotebookHeader({ notebookData, activeChatId, codeCount, markdownCount }
           </p>
         </div>
       </div>
-      
+
       <div className="flex items-center gap-3">
         {activeChatId && (
           <div className="px-3 py-1 bg-[var(--bg-secondary)] rounded-full border border-[var(--border-primary)] hover:border-[var(--border-secondary)] transition-colors">
@@ -316,19 +315,20 @@ function NotebookHeader({ notebookData, activeChatId, codeCount, markdownCount }
   );
 }
 
+// Main component - This is where the changes are.
 export default function NotebookDisplay() {
   const [notebookData, setNotebookData] = useState<NotebookData | null>(null);
   const [activeChatId, setActiveChatId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const pathname = usePathname();
 
-  // 🚨 KEY ADDITION: Function to clear notebook state and localStorage
+  // No changes to the hooks (clearNotebook, useEffects, fetchNotebookData)
   const clearNotebook = () => {
     console.log('📓 Clearing notebook state...');
     setNotebookData(null);
     setActiveChatId(null);
     setIsLoading(false);
-    
+
     // Clear notebook-related localStorage
     localStorage.removeItem('activeNotebookChatId');
     Object.keys(localStorage).forEach(key => {
@@ -337,11 +337,10 @@ export default function NotebookDisplay() {
         localStorage.removeItem(key);
       }
     });
-    
+
     console.log('✅ Notebook cleared successfully');
   };
 
-  // 🚨 KEY ADDITION: Listen for reset events from chat components
   useEffect(() => {
     if (!('BroadcastChannel' in window)) return;
 
@@ -375,22 +374,21 @@ export default function NotebookDisplay() {
     };
   }, []);
 
-  // Fetch notebook from API
   const fetchNotebookData = async (chatId: string) => {
     if (!chatId) return;
-    
+
     setIsLoading(true);
     try {
       console.log(`📓 Fetching notebook for chat: ${chatId}`);
       const response = await fetch(`${API_BASE}/api/conversation/${chatId}/notebook`);
-      
+
       if (response.ok) {
         const notebookData = await response.json();
         console.log('📓 Notebook data fetched successfully:', notebookData.notebook_file);
-        
+
         setNotebookData(notebookData);
         setActiveChatId(chatId);
-        
+
         // Store in localStorage for persistence
         localStorage.setItem(`notebook_${chatId}`, JSON.stringify(notebookData));
         localStorage.setItem('activeNotebookChatId', chatId);
@@ -408,31 +406,29 @@ export default function NotebookDisplay() {
     }
   };
 
-  // Listen for real-time notebook creation events
   useEffect(() => {
     if (!('BroadcastChannel' in window)) return;
-    
+
     const notebookChannel = new BroadcastChannel('notebook');
     notebookChannel.onmessage = (evt) => {
       console.log('📓 Notebook channel event:', evt.data);
-      
+
       if (evt.data?.type === 'notebook_created') {
         console.log('📓 New notebook detected for chat:', evt.data.chat_id);
         fetchNotebookData(evt.data.chat_id);
       }
     };
-    
+
     return () => notebookChannel.close();
   }, []);
 
-  // 🚨 ENHANCED: Load notebook with reset awareness
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    
+
     // Check if we should load a notebook
     const storedChatId = localStorage.getItem('activeNotebookChatId');
     const activeChatFromStorage = localStorage.getItem('activeChatId');
-    
+
     if (storedChatId) {
       // Try to load from localStorage first
       const storedNotebook = localStorage.getItem(`notebook_${storedChatId}`);
@@ -460,7 +456,36 @@ export default function NotebookDisplay() {
     }
   }, [pathname]);
 
-  // Show loading state
+
+  // ✅ THIS IS THE FIX: Filter out failed cells
+  // We use useMemo to ensure this filtering logic only runs when the notebookData changes.
+  const filteredCells = useMemo(() => {
+    if (!notebookData) return [];
+
+    const allCells = notebookData.notebook_content?.cells || [];
+
+    // The filtering logic:
+    return allCells.filter(cell => {
+      // Always keep markdown cells
+      if (cell.cell_type === 'markdown') {
+        return true;
+      }
+      // For code cells, check their outputs
+      if (cell.cell_type === 'code') {
+        // If there are no outputs, keep the cell (it might be unexecuted)
+        if (!cell.outputs || cell.outputs.length === 0) {
+          return true;
+        }
+        // Check if any output has the type 'error'.
+        const hasError = cell.outputs.some(output => output.output_type === 'error');
+        // Only return the cell if it does NOT have an error.
+        return !hasError;
+      }
+      // Keep any other cell types by default
+      return true;
+    });
+  }, [notebookData]); // Dependency array: only re-run when notebookData is updated
+
   if (isLoading) {
     return (
       <div className="notebook-empty-state">
@@ -479,21 +504,22 @@ export default function NotebookDisplay() {
     return <NotebookEmptyState />;
   }
 
-  const cells = notebookData.notebook_content?.cells || [];
-  const codeCount = cells.filter(c => c.cell_type === 'code').length;
-  const markdownCount = cells.filter(c => c.cell_type === 'markdown').length;
+  // ✅ MODIFIED: Use the filteredCells for calculations and rendering
+  const codeCount = filteredCells.filter(c => c.cell_type === 'code').length;
+  const markdownCount = filteredCells.filter(c => c.cell_type === 'markdown').length;
 
   return (
     <div className="notebook-container">
-      <NotebookHeader 
+      <NotebookHeader
         notebookData={notebookData}
         activeChatId={activeChatId}
         codeCount={codeCount}
         markdownCount={markdownCount}
       />
-      
+
       <div className="notebook-content">
-        {cells.map((cell, index) => {
+        {/* ✅ MODIFIED: Map over the new filteredCells array instead of the original one */}
+        {filteredCells.map((cell, index) => {
           if (cell.cell_type === 'code') {
             return <CodeCell key={`code-${index}`} cell={cell} index={index} />;
           } else if (cell.cell_type === 'markdown') {
@@ -501,8 +527,8 @@ export default function NotebookDisplay() {
           }
           return null;
         })}
-        
-        {cells.length === 0 && (
+
+        {filteredCells.length === 0 && (
           <div className="text-center py-8 text-[var(--text-secondary)]">
             <span className="material-symbols-outlined text-4xl mb-2 block">note</span>
             <p>This notebook appears to be empty.</p>
