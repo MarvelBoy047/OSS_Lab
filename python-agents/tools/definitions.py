@@ -73,7 +73,7 @@ CRITICAL REQUIREMENTS:
 - Always use try-except for error handling
 - Keep code under 15 lines maximum
 - Print results clearly and concisely
-- The code you should give optimized outputs with the print statements instead of raw output so you don't have read some verbose outputs everything will be as you expect to read
+- The code you should give optimized outputs with the print statements instead of raw output so you don't have read some verbose outputs everything will be as you expect to read!!
 REQUIRED OUTPUT FORMAT:
 ```python
 import pandas as pd
