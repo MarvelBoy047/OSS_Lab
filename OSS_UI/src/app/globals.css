@@ -529,3 +529,52 @@ body {
   color: #6b7280;
 }
 
+/* Fix for markdown rendering */
+.message-bubble.ai {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--input-border);
+  box-shadow: 0 0 20px rgba(34, 211, 238, 0.1);
+}
+
+/* Ensure links are clickable and styled properly */
+.message-bubble ai a {
+  color: var(--cyan-accent);
+  text-decoration: none;
+  border-bottom: 1px solid var(--cyan-accent);
+  transition: all 0.2s ease;
+}
+
+.message-bubble ai a:hover {
+  text-decoration: underline;
+  color: var(--cyan-accent);
+}
+
+/* Proper spacing between list items */
+.message-bubble ul li,
+.message-bubble ol li {
+  margin-bottom: 0.5rem;
+}
+
+/* Fix for line breaks in tables */
+.message-bubble table tr td,
+.message-bubble table tr th {
+  white-space: normal;
+  word-wrap: break-word;
+}
+
+/* Ensure proper handling of HTML content */
+.message-bubble ai pre {
+  overflow-x: auto;
+  background-color: var(--bg-secondary);
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.message-bubble ai code {
+  background-color: var(--bg-secondary);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-family: monospace;
+}
