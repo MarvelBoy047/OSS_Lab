@@ -141,8 +141,14 @@ function useChatManager() {
   // Load chatId from localStorage on initial mount
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const storedChatId = localStorage.getItem('activeChatId') || '';
-      setChatId(storedChatId);
+      const storedChatId = (localStorage.getItem('activeChatId') || '').trim();
+      // Ensure we don't set invalid values
+      if (storedChatId && storedChatId !== 'undefined' && storedChatId !== 'null') {
+        setChatId(storedChatId);
+      } else {
+        setChatId('');
+        localStorage.removeItem('activeChatId');
+      }
     }
   }, []);
 
@@ -165,7 +171,8 @@ function useChatManager() {
 
   // Load conversation data when chatId changes
   useEffect(() => {
-    if (!chatId) {
+    const trimmedChatId = chatId.trim();
+    if (!trimmedChatId || trimmedChatId === 'undefined' || trimmedChatId === 'null') {
       setInitialHistory([]);
       setIsLoading(false);
       setIsInputEnabled(true);
@@ -177,7 +184,7 @@ function useChatManager() {
 
     const loadConversation = async () => {
       try {
-        const response = await fetch(`${API_BASE}/api/conversation/${encodeURIComponent(chatId)}`);
+        const response = await fetch(`${API_BASE}/api/conversation/${encodeURIComponent(trimmedChatId)}`);
         
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);
@@ -221,8 +228,9 @@ function useChatManager() {
 
   // Handle URL-based chat switching  
   useEffect(() => {
-    const urlChatId = searchParams?.get('chatId');
-    if (urlChatId && urlChatId !== chatId) {
+    const urlChatId = searchParams?.get('chatId')?.trim();
+    if (urlChatId && urlChatId !== chatId && 
+        urlChatId !== 'undefined' && urlChatId !== 'null') {
       setChatId(urlChatId);
       if (typeof window !== 'undefined') {
         localStorage.setItem('activeChatId', urlChatId);
