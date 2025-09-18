@@ -4,10 +4,13 @@ import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 import { useAgentChat, AgentMessage } from '@/lib/hooks/useAgentChat';
 import { cn } from '@/lib/utils';
-import ReactMarkdown from 'react-markdown';
 import { Send, Mic, Copy, RefreshCw, Globe, Paperclip, X, Trash2, FileText } from 'lucide-react';
 import { toast } from 'sonner';
 import React from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm'; // For tables, tasklists, etc.
+import rehypeRaw from 'rehype-raw'; // Allows raw HTML (if needed)
+import rehypeSanitize from 'rehype-sanitize'; // Prevent XSS
 
 // Types
 interface ChatActions {
@@ -292,7 +295,22 @@ async function loadNotebookData(chatId: string) {
   }
 }
 
-// Message Bubble Component
+
+// ✅ Define sanitization options
+const sanitizeOptions = {
+  attributes: {
+    a: ['href', 'title'],
+    img: ['src', 'alt', 'title'],
+    // Optional: add other safe attributes
+  },
+  tagNames: [
+    'p', 'br', 'strong', 'em', 'code', 'pre',
+    'a', 'img', 'ul', 'ol', 'li',
+    'h1', 'h2', 'h3',
+    'table', 'thead', 'tbody', 'tr', 'th', 'td'
+  ],
+};
+
 const MessageBubble = ({ message, onCopy, onRegenerate }: {
   message: AgentMessage;
 } & ChatActions) => {
@@ -310,6 +328,16 @@ const MessageBubble = ({ message, onCopy, onRegenerate }: {
     return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   }, [message.timestamp]);
 
+  // Properly escape HTML entities (to prevent XSS even before markdown parsing)
+  const safeContent = useMemo(() => {
+    return message.content
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '<')
+      .replace(/>/g, '>')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }, [message.content]);
+
   return (
     <div
       className={cn(
@@ -319,14 +347,59 @@ const MessageBubble = ({ message, onCopy, onRegenerate }: {
       onMouseEnter={() => setShowActions(true)}
       onMouseLeave={() => setShowActions(false)}
     >
-      {message.content && (
-        <div className="prose prose-sm max-w-none">
-          <ReactMarkdown>
-            {message.content}
-          </ReactMarkdown>
-        </div>
-      )}
-      
+      <div className="prose prose-sm max-w-none dark:prose-invert">
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm]}
+          rehypePlugins={[
+            rehypeRaw,
+            [rehypeSanitize, sanitizeOptions] // ✅ Correct usage!
+          ]}
+          components={{
+            table: ({ children }) => (
+              <div className="overflow-x-auto my-4">
+                <table className="min-w-full border-collapse border border-gray-300 dark:border-gray-600">
+                  {children}
+                </table>
+              </div>
+            ),
+            th: ({ children }) => (
+              <th className="bg-gray-100 dark:bg-gray-800 px-4 py-2 text-left text-sm font-semibold border border-gray-300 dark:border-gray-600">
+                {children}
+              </th>
+            ),
+            td: ({ children }) => (
+              <td className="px-4 py-2 text-sm border border-gray-300 dark:border-gray-600">
+                {children}
+              </td>
+            ),
+            code: ({ children, className }) => {
+              const match = /language-(\w+)/.exec(className || '');
+              return match ? (
+                <pre className="bg-gray-100 dark:bg-gray-800 p-3 rounded overflow-x-auto my-2">
+                  <code className={className}>{children}</code>
+                </pre>
+              ) : (
+                <code className="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-sm break-all font-mono">
+                  {children}
+                </code>
+              );
+            },
+            a: ({ children, href }) => (
+              <a
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-cyan-accent hover:underline break-all"
+              >
+                {children}
+              </a>
+            )
+          }}
+        >
+          {safeContent}
+        </ReactMarkdown>
+      </div>
+
       {showActions && (
         <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
           <button
@@ -347,7 +420,7 @@ const MessageBubble = ({ message, onCopy, onRegenerate }: {
           )}
         </div>
       )}
-      
+
       <div className="text-xs text-gray-500 mt-2">
         {timestamp}
       </div>
