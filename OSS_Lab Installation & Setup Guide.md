@@ -195,8 +195,6 @@ pip install -r requirements.txt
 **🎉 Congratulations! OSS\_Lab is ready. Happy analyzing!**
 
 
-```
-
 
 
 
