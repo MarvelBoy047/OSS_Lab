@@ -13,10 +13,6 @@
 
 </div>
 
-## 🎥 Quick Demo Video
-
-[![OSS_Lab Quick Demo - AI Research Assistant Platform](https://img.youtube.com/vi/Bpcilc9F40I/maxresdefault.jpg)](https://youtu.be/Bpcilc9F40I?si=WTcL1B_rf89mRYjr)
-
 ## 🎥 Full Demo Video
 
 [![OSS_Lab Demo - AI Research Assistant Platform](https://img.youtube.com/vi/Bpcilc9F40I/maxresdefault.jpg)](https://youtu.be/Bpcilc9F40I?si=WTcL1B_rf89mRYjr)
