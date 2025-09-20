@@ -6,24 +6,21 @@
 
 **Democratizing AI research with an open-source, full-stack platform powered by open-source LLMs**
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg  )](https://opensource.org/licenses/MIT  )
-[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg  )](https://www.python.org/downloads/  )
-[![Next.js](https://img.shields.io/badge/Next.js-14-black  )](https://nextjs.org/  )
-[![FastAPI](https://img.shields.io/badge/FastAPI-latest-green  )](https://fastapi.tiangolo.com/  )
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg   )](https://opensource.org/licenses/MIT   )
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg   )](https://www.python.org/downloads/   )
+[![Next.js](https://img.shields.io/badge/Next.js-14-black   )](https://nextjs.org/   )
+[![FastAPI](https://img.shields.io/badge/FastAPI-latest-green   )](https://fastapi.tiangolo.com/   )
 
 </div>
 
 ## 🎥 Demo Video
 
-<iframe width="854" height="480" 
+<iframe width="560" height="315" 
         src="https://www.youtube.com/embed/z9Ba0FqqKPM?autoplay=1&mute=1" 
         frameborder="0" 
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
         allowfullscreen>
 </iframe>
-
-> [!NOTE]
-> **Watch the complete demo**: See OSS_Lab in action - from simple conversations to automated Jupyter notebook generation with GPT_OSS-120b model!
 
 ## 🌟 Overview
 
@@ -42,7 +39,7 @@ OSS_Lab is a comprehensive AI research platform that combines the power of open-
 
 > [!IMPORTANT]
 > To use OSS_Lab quickly, simply double-click on the ***```run.bat```*** file in the main directory. This script handles the complete setup and launches the application for you.
-> Complete **Guide** is here [**OSS_Lab Installation & Setup Guide.md**](   https://github.com/MarvelBoy047/OSS_Lab/blob/c9f850cedd75e003692184005094c7b82c0b6451/OSS_Lab%20Installation%20%26%20Setup%20Guide.md   )
+> Complete **Guide** is here [**OSS_Lab Installation & Setup Guide.md**](    https://github.com/MarvelBoy047/OSS_Lab/blob/c9f850cedd75e003692184005094c7b82c0b6451/OSS_Lab%20Installation%20%26%20Setup%20Guide.md    )
 
 ## 🗺️ Roadmap
 
@@ -67,7 +64,7 @@ Here is the current status of our key features and future development goals.
 ## 🏗️ Architecture
 
 ### Backend (`python-agents/`)
-```
+```python
 python-agents/
 ├── main.py              # FastAPI application entry point
 ├── config.py            # Configuration and API keys
@@ -79,7 +76,7 @@ python-agents/
 ```
 
 ### Frontend (`OSS_UI/`)
-```
+```python
 OSS_UI/
 ├── src/
 │   ├── app/             # Next.js app router pages
@@ -130,7 +127,7 @@ OSS_Lab leverages high-performance open-source models like **Llama-3-70B** throu
 ### Settings Configuration
 
 > [!NOTE]
-> Your Groq API key is required to power the AI features. You can get a free key from [Groq](https://console.groq.com/keys  ).
+> Your Groq API key is required to power the AI features. You can get a free key from [Groq](https://console.groq.com/keys   ).
 
 1. Navigate to **Settings** in the sidebar.
 2. Enter your Groq API key.
@@ -163,7 +160,7 @@ We welcome contributions to OSS_Lab! Here's how to get started:
 
 ## 📞 Support
 
-- **Issues**: [GitHub Issues](https://github.com/MarvelBoy047/OSS_Lab/issues  )
+- **Issues**: [GitHub Issues](https://github.com/MarvelBoy047/OSS_Lab/issues   )
 - **Demo Video**: [Watch on YouTube](https://youtu.be/Bpcilc9F40I?si=WTcL1B_rf89mRYjr)
 
 ---
@@ -174,6 +171,6 @@ We welcome contributions to OSS_Lab! Here's how to get started:
 
 *Empowering researchers, students, and innovators worldwide*
 
-[![Watch Demo](  https://img.shields.io/badge/  ▶️%20Watch%20Demo-YouTube-red?style=for-the-badge)](https://youtu.be/Bpcilc9F40I?si=WTcL1B_rf89mRYjr)
+[![Watch Demo](   https://img.shields.io/badge/   ▶️%20Watch%20Demo-YouTube-red?style=for-the-badge)](https://youtu.be/Bpcilc9F40I?si=WTcL1B_rf89mRYjr)
 
-</div>
+</div> 
