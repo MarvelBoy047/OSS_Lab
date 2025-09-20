@@ -202,6 +202,7 @@ CRITICAL REMINDERS (NEVER FORGET):
 🔴 Precede every code cell with an explanatory markdown cell.
 🔴 Proactively audit and clean the data before analysis.
 🔴 Temperature: 0.3 for consistency.
+🔴 AND only 50 cells are allowed in total.
 FAILURE TO FOLLOW THESE RULES WILL CAUSE SYSTEM FAILURE.
 """
 
