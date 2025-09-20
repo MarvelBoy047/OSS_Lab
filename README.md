@@ -15,11 +15,18 @@
 
 ## 🎥 Demo Video
 
-[![OSS_Lab Demo - AI Research Assistant Platform](https://img.youtube.com/vi/Bpcilc9F40I/maxresdefault.jpg)](https://youtu.be/Bpcilc9F40I?si=WTcL1B_rf89mRYjr)
+[![OSS_Lab Quick Demo - AI Research Assistant Platform](https://img.youtube.com/vi/Bpcilc9F40I/maxresdefault.jpg)](https://youtu.be/Bpcilc9F40I?si=WTcL1B_rf89mRYjr)
 
 > [!NOTE]
 > **Watch the complete demo**: See OSS_Lab in action - from simple conversations to automated Jupyter notebook generation with GPT_OSS-120b model!
 
+
+<iframe width="854" height="480" 
+        src="https://www.youtube.com/embed/z9Ba0FqqKPM?autoplay=1&mute=1" 
+        frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+        allowfullscreen>
+</iframe>
 ## 🌟 Overview
 
 OSS_Lab is a comprehensive AI research platform that combines the power of open-source LLMs with intuitive interfaces and automated analysis workflows. Transform complex data analysis into interactive notebooks and insights with just a conversation.
