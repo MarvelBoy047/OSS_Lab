@@ -124,7 +124,7 @@ class FullAnalysisAgent:
         step_count = 0
         done = False
         final_conclusion = ""
-        max_steps = 50  # Prevent infinite loops
+        max_steps = 100  # Prevent infinite loops
 
         # Save initial state
         self._save_conversation_checkpoint(conv_file, agent_flow, tool_call, parent_id,
@@ -144,7 +144,7 @@ class FullAnalysisAgent:
                     response = client.chat.completions.create(
                         model=model_config["model"],
                         messages=messages,
-                        max_tokens=2000,  # Reduced to prevent overly long responses
+                        max_tokens=20000,  # Reduced to prevent overly long responses
                         temperature=model_config["temperature"],
                         top_p=model_config["top_p"],
                         tool_choice="none"  # Prevent function calling
@@ -365,4 +365,5 @@ class FullAnalysisAgent:
             "cells_executed": cell_count,
             "steps_processed": step_count,
         }
+
 
