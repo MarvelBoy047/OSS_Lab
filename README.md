@@ -21,8 +21,6 @@
 > **Watch the complete demo**: See OSS_Lab in action - from simple conversations to automated Jupyter notebook generation with GPT_OSS-120b model!
 
 
-<iframe width="560" height="315" src="https://youtu.be/z9Ba0FqqKPM?si=HBojRq7A6e82vFUJ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
 ## 🌟 Overview
 
 OSS_Lab is a comprehensive AI research platform that combines the power of open-source LLMs with intuitive interfaces and automated analysis workflows. Transform complex data analysis into interactive notebooks and insights with just a conversation.
