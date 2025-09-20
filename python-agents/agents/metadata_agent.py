@@ -263,10 +263,11 @@ Generate a concise, professional summary explaining what was found in the datase
                     {"role": "system", "content": "Generate a clear, professional analysis summary."},
                     {"role": "user", "content": summary_prompt}
                 ],
-                max_tokens=500,
+                max_tokens=5000,
                 temperature=0.6
             )
 
             return self._extract_response_content(response)
         except Exception as e:
+
             return f"Analysis completed but summary generation failed: {e}"
