@@ -72,6 +72,7 @@ class FullAnalysisAgent:
 - Choose from: "python", "markdown", "visualization", "conclusion"
 - Code cells: 5-15 lines maximum
 - NEVER combine multiple objects or keys
+- ONLY 40 cells are allowed in total even visualization cell or markdown cell are considered as a cell count.
 - THIS IS ABSOLUTE - VIOLATION BREAKS THE SYSTEM
 
 """
@@ -364,3 +365,4 @@ class FullAnalysisAgent:
             "cells_executed": cell_count,
             "steps_processed": step_count,
         }
+
