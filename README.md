@@ -18,7 +18,7 @@
 [![OSS_Lab Demo - AI Research Assistant Platform](https://img.youtube.com/vi/Bpcilc9F40I/maxresdefault.jpg)](https://youtu.be/Bpcilc9F40I?si=WTcL1B_rf89mRYjr)
 
 > [!NOTE]
-> **Watch the complete demo**: See OSS_Lab in action - from simple conversations to automated Jupyter notebook generation with Llama-3-70B models!
+> **Watch the complete demo**: See OSS_Lab in action - from simple conversations to automated Jupyter notebook generation with GPT_OSS-120b model!
 
 ## 🌟 Overview
 
